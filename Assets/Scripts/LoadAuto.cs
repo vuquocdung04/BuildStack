@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoadAuto : MonoBehaviour
 {
-    protected virtual void Reset()
+    void Reset()
     {
         this.LoadComponents();
         this.ResetValue();

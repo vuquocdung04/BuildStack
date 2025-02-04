@@ -22,26 +22,29 @@ public class Main : Singleton<Main>
     {
         if (done)
         {
-            Camera mainCamera = Camera.main;
-
-            float targetFOV = 90f;
-            float currentFOV = mainCamera.fieldOfView;
-            mainCamera.fieldOfView = Mathf.Lerp(currentFOV, targetFOV, Time.deltaTime * 5f);
+            Cam.Instance.ZoomCam();
             return;
         }
+        Move();
 
+        if (Input.GetMouseButtonDown(0)) NewBlock();
+    }
+
+    protected virtual void Move()
+    {
         var time = Mathf.Abs(Time.realtimeSinceStartup % 2f - 1f);
-
-        var pos1 = LastCube.transform.position + Vector3.up * 10f;
-
+        var pos1 = LastCube.transform.position + Vector3.up * 20f;
         var pos2 = pos1 + ((level % 2 == 0) ? Vector3.left : -Vector3.forward) * 100;
 
         if (level % 2 == 0)
-            CurrentCube.transform.position = Vector3.Lerp(pos2, pos1, time);
+            CurrentCube.transform.position = Vector3.Lerp(pos2, pos1 + new Vector3(100f, 0, 0), time);
         else
-            CurrentCube.transform.position = Vector3.Lerp(pos1, pos2, time);
+            CurrentCube.transform.position = Vector3.Lerp(pos1 + new Vector3(0, 0, 100f), pos2, time);
+    }
 
-        if (Input.GetMouseButtonDown(0)) NewBlock();
+    protected virtual void RamdomColor()
+    {
+        CurrentCube.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.HSVToRGB((level / 100f) % 1f, 1f, 1f));
     }
 
     protected virtual void NewBlock()
@@ -50,12 +53,12 @@ public class Main : Singleton<Main>
         {
             float offsetX = Mathf.Abs(CurrentCube.transform.position.x - LastCube.transform.position.x);
             float offsetZ = Mathf.Abs(CurrentCube.transform.position.z - LastCube.transform.position.z);
+
             if (offsetX <= thresHold)
             {
                 CurrentCube.transform.position = new Vector3(LastCube.transform.position.x,
                     CurrentCube.transform.position.y,
                     CurrentCube.transform.position.z);
-
                 offsetX = 0;
             }
 
@@ -64,16 +67,15 @@ public class Main : Singleton<Main>
                 CurrentCube.transform.position = new Vector3(CurrentCube.transform.position.x,
                     CurrentCube.transform.position.y,
                     LastCube.transform.position.z);
-
                 offsetZ = 0;
             }
-
             CurrentCube.transform.localScale = new Vector3(
                 LastCube.transform.localScale.x - offsetX,
                 LastCube.transform.localScale.y,
                 LastCube.transform.localScale.z - offsetZ);
 
-            CurrentCube.transform.position = Vector3.Lerp(CurrentCube.transform.position, LastCube.transform.position, 0.5f) + Vector3.up * 5f;
+
+            CurrentCube.transform.position = Vector3.Lerp(CurrentCube.transform.position, LastCube.transform.position, 0.5f) + Vector3.up * 10f;
 
             if (CurrentCube.transform.localScale.x <= 0f || CurrentCube.transform.localScale.z <= 0f)
             {
@@ -85,11 +87,9 @@ public class Main : Singleton<Main>
 
         LastCube = CurrentCube;
         CurrentCube = Instantiate(LastCube);
-        CurrentCube.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.HSVToRGB((level / 100f) % 1f, 1f, 1f));
+        RamdomColor();
         level++;
-        Camera.main.transform.position = CurrentCube.transform.position + new Vector3(150, 150, 150);
-        Camera.main.transform.LookAt(CurrentCube.transform.position);
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, Camera.main.transform.position + new Vector3(0, 20, 0), 1f);
+        Camera.main.fieldOfView -= 0.5f;
     }
-
-
 }
