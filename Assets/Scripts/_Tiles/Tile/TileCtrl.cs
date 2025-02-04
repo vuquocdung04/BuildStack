@@ -129,7 +129,7 @@ public class TileCtrl : LoadAuto
                 if (transform.localScale.x < lostLength)
                 {
                     gameObject.AddComponent<Rigidbody>();
-                    Spawner.Instance.GameOver();
+                    Spawner.Instance.over.EndGame();
                     return;
                 }
 
@@ -146,7 +146,7 @@ public class TileCtrl : LoadAuto
                 if (transform.localScale.z < lostLength)
                 {
                     gameObject.AddComponent<Rigidbody>();
-                    Spawner.Instance.GameOver();
+                    Spawner.Instance.over.EndGame();
                     return;
                 }
 

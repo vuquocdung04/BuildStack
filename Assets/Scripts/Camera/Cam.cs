@@ -34,15 +34,16 @@ public class Cam : LoadAuto
     {
         Vector3 temp = Camera.main.transform.position;
         Vector3 final = new Vector3(temp.x, temp.y - Spawner.Instance.stack.Count * 0.5f, temp.z);
-        float cameraSizeFinal = Spawner.Instance.stack.Count * 0.65f;
+        float cameraSizeFinal = Spawner.Instance.stack.Count * 0.8f;
 
         var waitSecond = new WaitForSeconds(0.01f);
 
-        while (Camera.main.GetComponent<Camera>().orthographicSize < cameraSizeFinal)
+        while (Camera.main.orthographicSize < cameraSizeFinal)
         {
-            Camera.main.orthographicSize += 0.2f;
+            Camera.main.orthographicSize += 0.1f;
             temp = Camera.main.transform.position;
-            temp = Vector3.Lerp(temp, final, 0.2f);
+            //temp = Vector3.Lerp(temp, final, 0.05f);
+            temp = Vector3.MoveTowards(temp,final,10f);
             Camera.main.transform.position = temp;
             yield return waitSecond;
         }

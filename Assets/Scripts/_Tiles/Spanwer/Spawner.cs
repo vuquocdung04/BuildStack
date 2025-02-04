@@ -7,15 +7,16 @@ public class Spawner : Singleton<Spawner>
     [Header("===Preperties===")]
     [SerializeField] protected int level;
     public int Level => level;
-    [SerializeField] bool hasGameStarted, hasGameFinished;
+
 
     [Space(10)]
     [Header("====LoadComponent====")]
 
     [SerializeField] GameObject tile;
     [SerializeField] GameObject bottomTile;
+    [SerializeField] public GameOver over;
     [SerializeField] RanDomColor randomColor;
-    [SerializeField] Cam cam;
+    [SerializeField] public Cam cam;
     [Space(10)]
     [SerializeField] public List<GameObject> stack;
 
@@ -29,14 +30,14 @@ public class Spawner : Singleton<Spawner>
 
     private void Update()
     {
-        if (hasGameFinished || hasGameStarted) return;
+        if (over.hasGameFinished || over.hasGameStarted) return;
         if (Input.GetMouseButtonDown(0))
         {
             if(stack.Count > 1)
             {
                 stack[stack.Count - 1].GetComponent<TileCtrl>().ScaleTile();
             }
-            if(hasGameFinished) return;
+            if(over.hasGameFinished) return;
             StartCoroutine(cam.Move());
             SpawnTile();
             level++;
@@ -50,6 +51,7 @@ public class Spawner : Singleton<Spawner>
         this.LoadBottomTile();
         this.LoadTile();
         this.LoadCam();
+        this.LoadGameOver();
     }
     protected virtual void LoadColor()
     {
@@ -74,6 +76,12 @@ public class Spawner : Singleton<Spawner>
         if (cam != null) return;
         cam = GetComponentInChildren<Cam>();
     }
+
+    protected virtual void LoadGameOver()
+    {
+        if (over != null) return;
+        over = GetComponentInChildren<GameOver>();
+    }
     protected virtual void SpawnTile()
     {
         GameObject LastTile = stack[stack.Count - 1];
@@ -92,10 +100,5 @@ public class Spawner : Singleton<Spawner>
         CurrentTile.GetComponent<TileCtrl>().moveX = stack.Count % 2 == 0;
 
         randomColor.RandomColor(CurrentTile,level);
-    }
-
-    public void GameOver()
-    {
-
     }
 }
