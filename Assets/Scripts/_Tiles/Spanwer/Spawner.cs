@@ -12,10 +12,12 @@ public class Spawner : Singleton<Spawner>
     [Space(10)]
     [Header("====LoadComponent====")]
 
-    [SerializeField] GameObject tile, bottomTile;
+    [SerializeField] GameObject tile;
+    [SerializeField] GameObject bottomTile;
     [SerializeField] RanDomColor randomColor;
-
-    [SerializeField] List<GameObject> stack;
+    [SerializeField] Cam cam;
+    [Space(10)]
+    [SerializeField] public List<GameObject> stack;
 
 
     private void Start()
@@ -35,6 +37,7 @@ public class Spawner : Singleton<Spawner>
                 stack[stack.Count - 1].GetComponent<TileCtrl>().ScaleTile();
             }
             if(hasGameFinished) return;
+            StartCoroutine(cam.Move());
             SpawnTile();
             level++;
         } 
@@ -46,6 +49,7 @@ public class Spawner : Singleton<Spawner>
         this.LoadColor();
         this.LoadBottomTile();
         this.LoadTile();
+        this.LoadCam();
     }
     protected virtual void LoadColor()
     {
@@ -65,7 +69,11 @@ public class Spawner : Singleton<Spawner>
         tile = Resources.Load<GameObject>("Prefabs/Tile");
     }
 
-
+    protected virtual void LoadCam()
+    {
+        if (cam != null) return;
+        cam = GetComponentInChildren<Cam>();
+    }
     protected virtual void SpawnTile()
     {
         GameObject LastTile = stack[stack.Count - 1];
