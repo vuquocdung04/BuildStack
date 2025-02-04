@@ -9,21 +9,24 @@ public class Movement : LoadAuto
     [SerializeField] float maxDistance;
     [SerializeField] float stepLength;
     [SerializeField] bool moveForward;
-    [SerializeField] bool moveX;
+    [SerializeField] public bool moveX;
 
     private void Start()
     {
         distance = maxDistance;
         if (moveX)
-            transform.Translate(distance, 0, 0);
+            transform.Translate(-distance, 0, 0);
         else
-            transform.Translate(0,0,distance);
+            transform.Translate(0, 0, distance);
     }
 
     private void Update()
     {
         stepLength = Time.deltaTime * 6f;
-        if (moveX) MoveX();
+        if (moveX)
+        {
+            MoveX();
+        }
         else MoveZ();
     }
 
@@ -39,9 +42,9 @@ public class Movement : LoadAuto
     {
         if (moveForward)
         {
-            if(distance < maxDistance)
+            if (distance < maxDistance)
             {
-                transform.Translate(stepLength,0,0);
+                transform.Translate(-stepLength, 0, 0);
                 distance += stepLength;
             }
             else
@@ -49,9 +52,9 @@ public class Movement : LoadAuto
         }
         else
         {
-            if (distance > -maxDistance)
+            if (distance > -maxDistance) // chay tu 5 den -5
             {
-                transform.Translate(-stepLength,0,0);
+                transform.Translate(stepLength, 0, 0); // di chuyen sang phai
                 distance -= stepLength;
             }
             else
@@ -85,13 +88,13 @@ public class Movement : LoadAuto
 
     public void ScaleTile()
     {
-        if(Mathf.Abs(distance) > 0.1f)
+        if (Mathf.Abs(distance) > 0.2f)
         {
             float lostLength = Mathf.Abs(distance);
 
             if (moveX)
             {
-                if(transform.localScale.x < lostLength)
+                if (transform.localScale.x < lostLength)
                 {
                     gameObject.AddComponent<Rigidbody>();
                     Spawner.Instance.GameOver();
@@ -100,10 +103,10 @@ public class Movement : LoadAuto
 
                 GameObject _lostTile = Instantiate(lostTile);
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
-                _lostTile.transform.position = new Vector3(transform.position.x  + (distance > 0 ? 1 : -1) * (transform.localScale.x - lostLength)/2,
+                _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
-                transform.Translate((distance > 0 ? -1 : 1) * lostLength / 2, 0, 0);
+                transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
             }
             else
             {
@@ -116,8 +119,8 @@ public class Movement : LoadAuto
 
                 GameObject _lostTile = Instantiate(lostTile);
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
-                _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y, 
-                                                        transform.position.z +(distance > 0 ? 1 : -1) * (transform.localScale.x - lostLength) / 2);
+                _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
+                                                        transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
             }
@@ -125,7 +128,7 @@ public class Movement : LoadAuto
         else
         {
             if (moveX)
-                transform.Translate(-distance, 0, 0);
+                transform.Translate(distance, 0, 0);
             else
                 transform.Translate(0, 0, -distance);
         }

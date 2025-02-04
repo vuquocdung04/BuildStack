@@ -23,7 +23,7 @@ public class Spawner : Singleton<Spawner>
 
     private void Update()
     {
-        if (hasGameFinished || !hasGameStarted) return;
+        if (hasGameFinished || hasGameStarted) return;
         if (Input.GetMouseButtonDown(0))
         {
             if(stack.Count > 1)
@@ -33,31 +33,6 @@ public class Spawner : Singleton<Spawner>
             if(hasGameFinished) return;
             CreateTile();
         } 
-    }
-
-    protected override void LoadComponents()
-    {
-        base.LoadComponents();
-        this.LoadBottomTile();
-        this.LoadTile();
-    }
-    protected override void ResetValue()
-    {
-        base.ResetValue();
-        this.hasGameFinished = false;
-        this.hasGameStarted = true;
-        
-    }
-    protected virtual void LoadBottomTile()
-    {
-        if (bottomTile != null) return;
-        bottomTile = GetComponentInChildren<BottomTile>().gameObject;
-    }
-
-    protected virtual void LoadTile()
-    {
-        if (tile != null) return;
-        tile = GetComponentInChildren<Movement>().gameObject;
     }
     protected virtual void CreateTile()
     {
@@ -78,6 +53,7 @@ public class Spawner : Singleton<Spawner>
                                         previousTile.transform.position.y + previousTile.transform.localScale.y, 
                                         previousTile.transform.position.z);
 
+        activeTile.GetComponent<Movement>().moveX = stack.Count % 2 == 0;
     }
 
     public void GameOver()
