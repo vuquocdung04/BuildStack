@@ -34,7 +34,7 @@ public class Cam : LoadAuto
     {
         Vector3 temp = Camera.main.transform.position;
         Vector3 final = new Vector3(temp.x, temp.y - Spawner.Instance.stack.Count * 0.5f, temp.z);
-        float cameraSizeFinal = Spawner.Instance.stack.Count * 0.8f;
+        float cameraSizeFinal = Spawner.Instance.stack.Count * 0.6f;
 
         var waitSecond = new WaitForSeconds(0.01f);
 

@@ -15,7 +15,7 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] GameObject tile;
     [SerializeField] GameObject bottomTile;
     [SerializeField] public GameOver over;
-    [SerializeField] RanDomColor randomColor;
+    [SerializeField] public RanDomColor randomColor;
     [SerializeField] public Cam cam;
     [Space(10)]
     [SerializeField] public List<GameObject> stack;
@@ -25,15 +25,21 @@ public class Spawner : Singleton<Spawner>
     {
         stack = new List<GameObject>();
         stack.Add(bottomTile);
-        SpawnTile();
     }
 
     private void Update()
     {
-        if (over.hasGameFinished || over.hasGameStarted) return;
+        if (over.hasGameFinished)
+        {
+            if (Input.GetMouseButtonDown(0)) over.LoadScene();
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
-            if(stack.Count > 1)
+            over.Panel.SetActive(false);
+            over.start.gameObject.SetActive(false);
+
+            if (stack.Count > 1)
             {
                 stack[stack.Count - 1].GetComponent<TileCtrl>().ScaleTile();
             }
@@ -41,7 +47,7 @@ public class Spawner : Singleton<Spawner>
             StartCoroutine(cam.Move());
             SpawnTile();
             level++;
-        } 
+        }
     }
 
     protected override void LoadComponents()
