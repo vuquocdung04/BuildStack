@@ -105,6 +105,7 @@ public class Movement : LoadAuto
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
                 _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
+                RamdomColor(_lostTile);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
                 transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
             }
@@ -121,6 +122,7 @@ public class Movement : LoadAuto
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
                 _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
                                                         transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
+                RamdomColor(_lostTile);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
             }
@@ -134,5 +136,10 @@ public class Movement : LoadAuto
         }
 
         Destroy(this);
+    }
+
+    protected virtual void RamdomColor(GameObject obj)
+    {
+        obj.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.HSVToRGB(((Spawner.Instance.Level -1 ) / 100f) % 1f, 1f, 1f));
     }
 }
