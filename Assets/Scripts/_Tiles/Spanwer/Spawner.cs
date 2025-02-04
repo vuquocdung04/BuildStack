@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Spawner : Singleton<Spawner>
 {
-    [Header("===Preperties===")]
-    [SerializeField] protected int level;
-    public int Level => level;
-
-
     [Space(10)]
     [Header("====LoadComponent====")]
 
@@ -17,6 +12,7 @@ public class Spawner : Singleton<Spawner>
     [SerializeField] public GameOver over;
     [SerializeField] public RanDomColor randomColor;
     [SerializeField] public Cam cam;
+    [SerializeField] public ScoreManger scoreManger;
     [Space(10)]
     [SerializeField] public List<GameObject> stack;
 
@@ -38,6 +34,8 @@ public class Spawner : Singleton<Spawner>
         {
             over.Panel.SetActive(false);
             over.start.gameObject.SetActive(false);
+            scoreManger.hightScoreText.gameObject.SetActive(false);
+
 
             if (stack.Count > 1)
             {
@@ -46,8 +44,8 @@ public class Spawner : Singleton<Spawner>
             if(over.hasGameFinished) return;
             StartCoroutine(cam.Move());
             SpawnTile();
-            level++;
         }
+        if (Input.GetMouseButtonUp(0)) scoreManger.score++;
     }
 
     protected override void LoadComponents()
@@ -58,6 +56,7 @@ public class Spawner : Singleton<Spawner>
         this.LoadTile();
         this.LoadCam();
         this.LoadGameOver();
+        this.LoadScoreManager();
     }
     protected virtual void LoadColor()
     {
@@ -88,6 +87,13 @@ public class Spawner : Singleton<Spawner>
         if (over != null) return;
         over = GetComponentInChildren<GameOver>();
     }
+
+
+    protected virtual void LoadScoreManager()
+    {
+        if (scoreManger != null) return;
+        scoreManger = GetComponentInChildren<ScoreManger>();
+    }
     protected virtual void SpawnTile()
     {
         GameObject LastTile = stack[stack.Count - 1];
@@ -105,6 +111,6 @@ public class Spawner : Singleton<Spawner>
 
         CurrentTile.GetComponent<TileCtrl>().moveX = stack.Count % 2 == 0;
 
-        randomColor.RandomColor(CurrentTile,level);
+        randomColor.RandomColor(CurrentTile,scoreManger.score);
     }
 }

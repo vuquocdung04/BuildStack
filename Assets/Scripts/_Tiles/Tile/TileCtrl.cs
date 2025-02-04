@@ -137,7 +137,7 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
                 _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
-                randomColor.RandomColor(_lostTile, Spawner.Instance.Level - 1);
+                randomColor.RandomColor(_lostTile, Spawner.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
                 transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
             }
@@ -154,7 +154,7 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
                 _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
                                                         transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
-                randomColor.RandomColor(_lostTile, Spawner.Instance.Level - 1);
+                randomColor.RandomColor(_lostTile, Spawner.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
             }

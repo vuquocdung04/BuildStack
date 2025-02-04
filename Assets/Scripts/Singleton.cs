@@ -8,7 +8,7 @@
 public abstract class Singleton<T> : LoadAuto where T : LoadAuto
 {
     public static T Instance;
-    public bool m_DontDestroyOnLoad = true;
+    //public bool m_DontDestroyOnLoad = true;
 
     /// <summary>
     /// Create the singleton instance if needed and call OnSingletonAwake().
@@ -20,10 +20,10 @@ public abstract class Singleton<T> : LoadAuto where T : LoadAuto
             //If I am the first instance, make me the Singleton
             Instance = this as T;
 
-            if (transform.parent == null && m_DontDestroyOnLoad)
-            {
-                DontDestroyOnLoad(this.gameObject);
-            }
+            //if (transform.parent == null && m_DontDestroyOnLoad)
+            //{
+            //    DontDestroyOnLoad(this.gameObject);
+            //}
         }
         else
         {

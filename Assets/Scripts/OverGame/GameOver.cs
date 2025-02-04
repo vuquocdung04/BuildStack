@@ -15,6 +15,7 @@ public class GameOver : MonoBehaviour
         hasGameFinished = true;
         Panel.SetActive(true);
         end.gameObject.SetActive(true);
+        Spawner.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
         StartCoroutine(Spawner.Instance.cam.EndCam());
     }
 
