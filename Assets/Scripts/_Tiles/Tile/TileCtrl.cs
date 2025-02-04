@@ -2,18 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : LoadAuto
+public class TileCtrl : LoadAuto
 {
-    [SerializeField] GameObject lostTile;
+
+    [Header("====Properties====")]
     [SerializeField] float distance;
     [SerializeField] float maxDistance;
     [SerializeField] float stepLength;
+    [SerializeField] float minCutThresHold;
+
     [SerializeField] bool moveForward;
     [SerializeField] public bool moveX;
-
+    
+    [Space(10)]
+    [Header("====LoadComponent====")]
+    [SerializeField] GameObject lostTile;
+    [SerializeField] RanDomColor randomColor;
     private void Start()
     {
-        distance = maxDistance;
         if (moveX)
             transform.Translate(-distance, 0, 0);
         else
@@ -29,15 +35,39 @@ public class Movement : LoadAuto
         }
         else MoveZ();
     }
+    #region Load_Reset
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadLostTile();
+        this.LoadColor();
+    }
 
     protected override void ResetValue()
     {
         base.ResetValue();
         maxDistance = 5f;
+        distance = maxDistance;
         moveForward = false;
         moveX = false;
+        minCutThresHold = 0.2f;
     }
 
+    protected virtual void LoadLostTile()
+    {
+        if (lostTile != null) return;
+        lostTile = Resources.Load<GameObject>("Prefabs/Lost");
+    }
+    protected virtual void LoadColor()
+    {
+        if (randomColor != null) return;
+        randomColor = GetComponent<RanDomColor>();
+    }
+
+
+    #endregion
+
+    #region moveTile
     void MoveX()
     {
         if (moveForward)
@@ -85,10 +115,12 @@ public class Movement : LoadAuto
                 moveForward = true;
         }
     }
+    #endregion
 
+    #region scaleTile
     public void ScaleTile()
     {
-        if (Mathf.Abs(distance) > 0.2f)
+        if (Mathf.Abs(distance) > minCutThresHold)
         {
             float lostLength = Mathf.Abs(distance);
 
@@ -105,7 +137,7 @@ public class Movement : LoadAuto
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
                 _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
-                RamdomColor(_lostTile);
+                randomColor.RandomColor(_lostTile, Spawner.Instance.Level - 1);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
                 transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
             }
@@ -122,7 +154,7 @@ public class Movement : LoadAuto
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
                 _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
                                                         transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
-                RamdomColor(_lostTile);
+                randomColor.RandomColor(_lostTile, Spawner.Instance.Level - 1);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
             }
@@ -137,9 +169,6 @@ public class Movement : LoadAuto
 
         Destroy(this);
     }
+    #endregion
 
-    protected virtual void RamdomColor(GameObject obj)
-    {
-        obj.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.HSVToRGB(((Spawner.Instance.Level -1 ) / 100f) % 1f, 1f, 1f));
-    }
 }

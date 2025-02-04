@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4877411689831701940}
   - component: {fileID: 7548557995219199167}
   - component: {fileID: 1670062198980291298}
+  - component: {fileID: 5008519344345857294}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -118,9 +119,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ea690ee69bce547ad38951a78bb823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lostTile: {fileID: 8012706578639852188, guid: 385b813c9fffa3646ad2f23bf2217014, type: 3}
-  distance: 0
+  distance: 5
   maxDistance: 5
   stepLength: 0
   moveForward: 0
+  minCutThresHold: 0.2
   moveX: 0
+  lostTile: {fileID: 8012706578639852188, guid: 385b813c9fffa3646ad2f23bf2217014, type: 3}
+  randomColor: {fileID: 5008519344345857294}
+--- !u!114 &5008519344345857294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8012706578639852188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2fc66a55db956944a88eb8962ec87d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
