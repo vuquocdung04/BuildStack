@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class RanDomColor : LoadAuto
+public class ColorManager : LoadAuto
 {
     public void RandomColor(GameObject obj, int param)
     {

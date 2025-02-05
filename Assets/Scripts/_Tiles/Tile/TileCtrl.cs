@@ -17,7 +17,6 @@ public class TileCtrl : LoadAuto
     [Space(10)]
     [Header("====LoadComponent====")]
     [SerializeField] GameObject lostTile;
-    [SerializeField] RanDomColor randomColor;
     private void Start()
     {
         if (moveX)
@@ -40,7 +39,6 @@ public class TileCtrl : LoadAuto
     {
         base.LoadComponents();
         this.LoadLostTile();
-        this.LoadColor();
     }
 
     protected override void ResetValue()
@@ -58,12 +56,6 @@ public class TileCtrl : LoadAuto
         if (lostTile != null) return;
         lostTile = Resources.Load<GameObject>("Prefabs/Lost");
     }
-    protected virtual void LoadColor()
-    {
-        if (randomColor != null) return;
-        randomColor = GetComponent<RanDomColor>();
-    }
-
 
     #endregion
 
@@ -137,7 +129,7 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
                 _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
-                randomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
+                GameManager.Instance.ranDomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
                 transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
                 GameManager.Instance.audioManager.SoundBrick();
@@ -155,7 +147,7 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
                 _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
                                                         transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
-                randomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
+                GameManager.Instance.ranDomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
                 GameManager.Instance.audioManager.SoundBrick();

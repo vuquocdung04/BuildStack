@@ -9,7 +9,6 @@ public class Spawner : LoadAuto
 
     [SerializeField] GameObject tile;
     [SerializeField] GameObject bottomTile;
-    [SerializeField] public RanDomColor randomColor;
     [SerializeField] public Cam cam;
     [Space(10)]
     [SerializeField] public List<GameObject> stack;
@@ -49,15 +48,9 @@ public class Spawner : LoadAuto
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadColor();
         this.LoadBottomTile();
         this.LoadTile();
         this.LoadCam();
-    }
-    protected virtual void LoadColor()
-    {
-        if (randomColor != null) return;
-        randomColor = GetComponent<RanDomColor>();
     }
 
     protected virtual void LoadBottomTile()
@@ -96,6 +89,6 @@ public class Spawner : LoadAuto
 
         CurrentTile.GetComponent<TileCtrl>().moveX = stack.Count % 2 == 0;
 
-        randomColor.RandomColor(CurrentTile,GameManager.Instance.scoreManger.score);
+        GameManager.Instance.ranDomColor.RandomColor(CurrentTile,GameManager.Instance.scoreManger.score);
     }
 }
