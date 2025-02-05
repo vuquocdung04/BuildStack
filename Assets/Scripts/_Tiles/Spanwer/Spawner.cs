@@ -29,25 +29,18 @@ public class Spawner : LoadAuto
         }
         if (Input.GetMouseButtonDown(0))
         {
-            GameManager.Instance.gameOver.Panel.SetActive(false);
-            GameManager.Instance.gameOver.startText.SetActive(false);
-            if (!GameManager.Instance.gameOver.startText.activeInHierarchy)
-            {
-                GameManager.Instance.audioManager.audioBG.gameObject.SetActive(true);
-            }
-            GameManager.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
-
+            SetActiveObj();
             if (stack.Count > 1)
-            {
                 stack[stack.Count - 1].GetComponent<TileCtrl>().ScaleTile();
-            }
+
             if(GameManager.Instance.gameOver.hasGameFinished) return;
-            StartCoroutine(cam.Move());
+            if (GameManager.Instance.scoreManger.score > 0)
+                StartCoroutine(cam.Move());
             SpawnTile();
         }
         if (Input.GetMouseButtonUp(0)) GameManager.Instance.scoreManger.score++;
     }
-
+    #region LoadComponent
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -74,7 +67,9 @@ public class Spawner : LoadAuto
         cam = GetComponentInChildren<Cam>();
     }
 
+    #endregion
 
+    #region SpawnTile
     protected virtual void SpawnTile()
     {
         GameObject LastTile = stack[stack.Count - 1];
@@ -93,5 +88,18 @@ public class Spawner : LoadAuto
         CurrentTile.GetComponent<TileCtrl>().moveX = stack.Count % 2 == 0;
 
         GameManager.Instance.ranDomColor.RandomColor(CurrentTile,GameManager.Instance.scoreManger.score);
+    }
+
+    #endregion
+
+    protected virtual void SetActiveObj()
+    {
+        GameManager.Instance.gameOver.Panel.SetActive(false);
+        GameManager.Instance.gameOver.startText.SetActive(false);
+        if (!GameManager.Instance.gameOver.startText.activeInHierarchy)
+            GameManager.Instance.audioManager.audioBG.gameObject.SetActive(true);
+
+
+        GameManager.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
     }
 }
