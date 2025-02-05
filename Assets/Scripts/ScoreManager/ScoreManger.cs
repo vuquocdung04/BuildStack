@@ -14,7 +14,9 @@ public class ScoreManger : LoadAuto
     private void Start()
     {
         maxScore = PlayerPrefs.GetInt(Const.highScore,0);
-        hightScoreText.text = "HightScore: "  + (maxScore-1) .ToString();
+        if (maxScore > 0)
+            hightScoreText.text = "HightScore: " + (maxScore - 1).ToString();
+        hightScoreText.text = "HightScore: " + maxScore.ToString();
     }
 
     private void Update()
