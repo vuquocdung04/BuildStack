@@ -32,11 +32,21 @@ public class ScoreManger : LoadAuto
     {
         base.LoadComponents();
         this.LoadText();
+        this.LoadTextHighScore();
     }
 
     protected virtual void LoadText()
     {
+        GameObject objScore = GameObject.Find(Const.Obj_ScoreText);
         if (scoreText != null) return;
-        scoreText = GetComponentInChildren<TMP_Text>();
+        scoreText = objScore.GetComponent<TMP_Text>();
+    }
+
+    protected virtual void LoadTextHighScore()
+    {
+        GameObject objHighScore = GameObject.Find(Const.Obj_HighScore);
+        if (hightScoreText != null) return;
+        hightScoreText = objHighScore.GetComponent<TMP_Text>();
+        
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cam : LoadAuto
 {
-    [SerializeField] public float moveLength;
+    [SerializeField] float moveLength;
     [SerializeField] float stepLength;
     [SerializeField] float timeMove;
 
@@ -33,8 +33,8 @@ public class Cam : LoadAuto
     public IEnumerator EndCam()
     {
         Vector3 temp = Camera.main.transform.position;
-        Vector3 final = new Vector3(temp.x, temp.y - Spawner.Instance.stack.Count * 0.5f, temp.z);
-        float cameraSizeFinal = Spawner.Instance.stack.Count * 0.6f;
+        Vector3 final = new Vector3(temp.x, temp.y - GameManager.Instance.spawner.stack.Count * 0.5f, temp.z);
+        float cameraSizeFinal = GameManager.Instance.spawner.stack.Count * 0.5f;
 
         var waitSecond = new WaitForSeconds(0.01f);
 

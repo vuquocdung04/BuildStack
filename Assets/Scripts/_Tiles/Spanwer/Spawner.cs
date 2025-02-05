@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : Singleton<Spawner>
+public class Spawner : LoadAuto
 {
     [Space(10)]
     [Header("====LoadComponent====")]
 
     [SerializeField] GameObject tile;
     [SerializeField] GameObject bottomTile;
-    [SerializeField] public GameOver over;
     [SerializeField] public RanDomColor randomColor;
     [SerializeField] public Cam cam;
-    [SerializeField] public ScoreManger scoreManger;
     [Space(10)]
     [SerializeField] public List<GameObject> stack;
 
@@ -25,27 +23,27 @@ public class Spawner : Singleton<Spawner>
 
     private void Update()
     {
-        if (over.hasGameFinished)
+        if (GameManager.Instance.gameOver.hasGameFinished)
         {
-            if (Input.GetMouseButtonDown(0)) over.LoadScene();
+            if (Input.GetMouseButtonDown(0)) GameManager.Instance.gameOver.LoadScene();
             return;
         }
         if (Input.GetMouseButtonDown(0))
         {
-            over.Panel.SetActive(false);
-            over.start.gameObject.SetActive(false);
-            scoreManger.hightScoreText.gameObject.SetActive(false);
+            GameManager.Instance.gameOver.Panel.SetActive(false);
+            GameManager.Instance.gameOver.startText.SetActive(false);
+            GameManager.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
 
 
             if (stack.Count > 1)
             {
                 stack[stack.Count - 1].GetComponent<TileCtrl>().ScaleTile();
             }
-            if(over.hasGameFinished) return;
+            if(GameManager.Instance.gameOver.hasGameFinished) return;
             StartCoroutine(cam.Move());
             SpawnTile();
         }
-        if (Input.GetMouseButtonUp(0)) scoreManger.score++;
+        if (Input.GetMouseButtonUp(0)) GameManager.Instance.scoreManger.score++;
     }
 
     protected override void LoadComponents()
@@ -55,8 +53,6 @@ public class Spawner : Singleton<Spawner>
         this.LoadBottomTile();
         this.LoadTile();
         this.LoadCam();
-        this.LoadGameOver();
-        this.LoadScoreManager();
     }
     protected virtual void LoadColor()
     {
@@ -82,18 +78,7 @@ public class Spawner : Singleton<Spawner>
         cam = GetComponentInChildren<Cam>();
     }
 
-    protected virtual void LoadGameOver()
-    {
-        if (over != null) return;
-        over = GetComponentInChildren<GameOver>();
-    }
 
-
-    protected virtual void LoadScoreManager()
-    {
-        if (scoreManger != null) return;
-        scoreManger = GetComponentInChildren<ScoreManger>();
-    }
     protected virtual void SpawnTile()
     {
         GameObject LastTile = stack[stack.Count - 1];
@@ -111,6 +96,6 @@ public class Spawner : Singleton<Spawner>
 
         CurrentTile.GetComponent<TileCtrl>().moveX = stack.Count % 2 == 0;
 
-        randomColor.RandomColor(CurrentTile,scoreManger.score);
+        randomColor.RandomColor(CurrentTile,GameManager.Instance.scoreManger.score);
     }
 }

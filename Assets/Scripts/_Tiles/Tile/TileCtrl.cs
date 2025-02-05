@@ -129,7 +129,7 @@ public class TileCtrl : LoadAuto
                 if (transform.localScale.x < lostLength)
                 {
                     gameObject.AddComponent<Rigidbody>();
-                    Spawner.Instance.over.EndGame();
+                    GameManager.Instance.gameOver.EndGame();
                     return;
                 }
 
@@ -137,17 +137,17 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(lostLength, transform.localScale.y, transform.localScale.z);
                 _lostTile.transform.position = new Vector3(transform.position.x + (distance > 0 ? -1 : 1) * (transform.localScale.x - lostLength) / 2,
                                                             transform.position.y, transform.position.z);
-                randomColor.RandomColor(_lostTile, Spawner.Instance.scoreManger.score - 1);
+                randomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(lostLength, 0, 0);
                 transform.Translate((distance > 0 ? 1 : -1) * lostLength / 2, 0, 0);
-                AudioManager.Instance.SoundBrick();
+                GameManager.Instance.audioManager.SoundBrick();
             }
             else
             {
                 if (transform.localScale.z < lostLength)
                 {
                     gameObject.AddComponent<Rigidbody>();
-                    Spawner.Instance.over.EndGame();
+                    GameManager.Instance.gameOver.EndGame();
                     return;
                 }
 
@@ -155,10 +155,10 @@ public class TileCtrl : LoadAuto
                 _lostTile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, lostLength);
                 _lostTile.transform.position = new Vector3(transform.position.x, transform.position.y,
                                                         transform.position.z + (distance > 0 ? 1 : -1) * (transform.localScale.z - lostLength) / 2);
-                randomColor.RandomColor(_lostTile, Spawner.Instance.scoreManger.score - 1);
+                randomColor.RandomColor(_lostTile, GameManager.Instance.scoreManger.score - 1);
                 transform.localScale -= new Vector3(0, 0, lostLength);
                 transform.Translate(0, 0, (distance > 0 ? -1 : 1) * lostLength / 2);
-                AudioManager.Instance.SoundBrick();
+                GameManager.Instance.audioManager.SoundBrick();
             }
         }
         else
@@ -167,7 +167,7 @@ public class TileCtrl : LoadAuto
                 transform.Translate(distance, 0, 0);
             else
                 transform.Translate(0, 0, -distance);
-            AudioManager.Instance.SoundPerFect();
+            GameManager.Instance.audioManager.SoundPerFect();
         }
 
         Destroy(this);
