@@ -7,6 +7,12 @@ public class AudioManager : LoadAuto
     [SerializeField] AudioClip clipBreak;
     [SerializeField] AudioClip clipPerfect;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] public AudioSource audioBG;
+
+    private void Start()
+    {
+        audioBG.gameObject.SetActive(false);
+    }
 
     public void SoundBrick()
     {
@@ -17,4 +23,5 @@ public class AudioManager : LoadAuto
     {
         audioSource.PlayOneShot(clipPerfect);
     }
+
 }

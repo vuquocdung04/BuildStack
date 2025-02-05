@@ -31,8 +31,11 @@ public class Spawner : LoadAuto
         {
             GameManager.Instance.gameOver.Panel.SetActive(false);
             GameManager.Instance.gameOver.startText.SetActive(false);
+            if (!GameManager.Instance.gameOver.startText.activeInHierarchy)
+            {
+                GameManager.Instance.audioManager.audioBG.gameObject.SetActive(true);
+            }
             GameManager.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
-
 
             if (stack.Count > 1)
             {
