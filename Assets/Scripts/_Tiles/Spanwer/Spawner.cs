@@ -38,7 +38,7 @@ public class Spawner : LoadAuto
                 StartCoroutine(cam.Move());
             SpawnTile();
         }
-        if (Input.GetMouseButtonUp(0)) GameManager.Instance.scoreManger.score++;
+        if (Input.GetMouseButtonUp(0)) this.ScoreTest();
     }
     #region LoadComponent
     protected override void LoadComponents()
@@ -101,5 +101,10 @@ public class Spawner : LoadAuto
 
 
         GameManager.Instance.scoreManger.hightScoreText.gameObject.SetActive(false);
+    }
+
+    protected virtual void ScoreTest()
+    {
+        ObserverManager.Instance.UpdateScore();
     }
 }

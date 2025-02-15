@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ScoreManger : LoadAuto
+public class ScoreManger : LoadAuto, IObserver
 {
     [SerializeField] TMP_Text scoreText;
     [SerializeField] public TMP_Text hightScoreText;
@@ -13,21 +13,12 @@ public class ScoreManger : LoadAuto
 
     private void Start()
     {
+        ObserverManager.Instance.AddListened(this);
         maxScore = PlayerPrefs.GetInt(Const.highScore,0);
         if (maxScore > 0)
             hightScoreText.text = "HightScore: " + (maxScore - 1).ToString();
         hightScoreText.text = "HightScore: " + maxScore.ToString();
-    }
 
-    private void Update()
-    {
-        if (score - 1 < 0) return;
-        scoreText.text = (score-1).ToString();
-        if(score > maxScore)
-        {
-            maxScore =score;
-            PlayerPrefs.SetInt(Const.highScore, maxScore);
-        }
     }
 
     protected override void LoadComponents()
@@ -50,5 +41,16 @@ public class ScoreManger : LoadAuto
         if (hightScoreText != null) return;
         hightScoreText = objHighScore.GetComponent<TMP_Text>();
         
+    }
+
+    public void UpdateScoreText()
+    {
+        score++;
+        scoreText.text = (score-1).ToString() + " <sprite name=\"Topaz\">";
+        if(score > maxScore)
+        {
+            maxScore = score;
+            PlayerPrefs.SetInt(Const.highScore, maxScore-1);
+        }
     }
 }
